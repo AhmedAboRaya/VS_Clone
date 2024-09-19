@@ -83,11 +83,6 @@ export const architecture: IFile[] = [
                         id: 23,
                         name: 'App.css',
                         type: 'file',
-                    },
-                    {
-                        id: 24,
-                        name: 'App.test.tsx',
-                        type: 'file',
                     }
                 ]
             },
@@ -132,7 +127,7 @@ export const architecture: IFile[] = [
             },
             {
                 id: 19,
-                name: 'index.html',
+                name: 'file.ts',
                 type: 'file',
             },
             {

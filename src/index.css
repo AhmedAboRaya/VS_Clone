@@ -4,4 +4,39 @@
 
 *{
   background-color: black;
+  
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 44px 18rem 1fr;
+  grid-template-rows: 37px 1fr 20px;
+  grid-template-areas:
+    "icons leftSide tabs"
+    "icons leftSide window"
+    "footer footer footer";
+  height: 100vh; 
+}
+
+.icons {
+  grid-area: icons;
+}
+
+.leftSide {
+  grid-area: leftSide;
+  border-left: 1px solid white;
+}
+
+.tabs {
+  grid-area: tabs;
+  border-bottom: 1px solid white;
+}
+
+.window {
+  grid-area: window;
+}
+
+.footer {
+  grid-area: footer;
+  border: 1px solid white;
 }

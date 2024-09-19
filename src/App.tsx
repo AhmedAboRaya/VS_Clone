@@ -1,14 +1,11 @@
-
-import LeftSide from './components/LeftSide'
+import Layout from './components/Layout';
 
 function App() {
-
   return (
     <>
-
-      <LeftSide />
+      <Layout />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

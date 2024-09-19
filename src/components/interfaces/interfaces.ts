@@ -6,8 +6,7 @@ export interface ISVG {
 
 export interface IArchitecture {
     fileTree: IFile;
-    onClicking: (id: number) => void;
-    expanded: boolean;
+    onClicking: (name: string) => void;
 }
 
 export interface IFile {
@@ -16,4 +15,9 @@ export interface IFile {
     type: 'file' | 'folder';
     children?: IFile[];
     content?: string;
+}
+
+export interface ITreeSlice {
+    tabsFile: string[];
+    openFile: string
 }
