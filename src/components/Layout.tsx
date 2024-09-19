@@ -1,12 +1,15 @@
 import LeftSide from "./LeftSide";
 import UpperSide from "./UpperSide";
 import '../index.css'
+import IconsBar from "./IconsBar";
+import Window from "./Window";
+import Footer from "./Footer";
 
 const Layout = () => {
   return (
     <div className="grid-container">
         <div className="icons text-white">
-            s
+            <IconsBar />
         </div>
 
         <div className="tabs border-b-2 border-white">
@@ -18,11 +21,11 @@ const Layout = () => {
         </div>
 
         <div className="window">
-            s
+            <Window />
         </div>
 
         <div className="footer">
-
+            <Footer />
         </div>
     </div>
   );

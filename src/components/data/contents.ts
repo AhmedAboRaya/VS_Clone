@@ -1,4 +1,228 @@
-import { ISVG } from "../interfaces/interfaces";
+export const contents = {
+    'App.tsx': `import Layout from './components/Layout';
+  
+  function App() {
+    return (
+      <>
+        <Layout />
+      </>
+    );
+  }
+  
+  export default App;
+  `,
+    'App.css': `@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+  background-color: black;
+  
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 44px 18rem 1fr;
+  grid-template-rows: 37px 1fr 20px;
+  grid-template-areas:
+    "icons leftSide tabs"
+    "icons leftSide window"
+    "footer footer footer";
+  height: 100vh; 
+}
+
+.icons {
+  grid-area: icons;
+}
+
+.leftSide {
+  grid-area: leftSide;
+  border-left: 1px solid white;
+}
+
+.tabs {
+  grid-area: tabs;
+  border-bottom: 1px solid white;
+}
+
+.window {
+  grid-area: window;
+}
+
+.footer {
+  grid-area: footer;
+  border: 1px solid white;
+}`,
+    'Layout.tsx': `import LeftSide from "./LeftSide";
+import UpperSide from "./UpperSide";
+import '../index.css'
+import IconsBar from "./IconsBar";
+import Window from "./Window";
+
+const Layout = () => {
+  return (
+    <div className="grid-container">
+        <div className="icons text-white">
+            <IconsBar />
+        </div>
+
+        <div className="tabs border-b-2 border-white">
+            <UpperSide />
+        </div>
+        
+        <div className="leftSide border-r-2 border-gray-300 text-white">
+            <LeftSide />
+        </div>
+
+        <div className="window">
+            <Window />
+        </div>
+
+        <div className="footer">
+            
+        </div>
+    </div>
+  );
+};
+
+export default Layout;`,
+    'tailwind.config.js' : `/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["./src/**/*.{html,js,ts,tsx}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+`,
+    'index.html' : `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+`,
+    'Architecture.tsx': `import { useState } from "react";
+import { IArchitecture } from "./interfaces/interfaces";
+import SVG from "./SVG/SVG";
+import { ChevronRight, ChevronDown } from "lucide-react";
+
+const Architecture = ({ fileTree, onClicking }: IArchitecture) => {
+  const [opened, isOpened] = useState<boolean>(false);
+
+  const spliting: string[] = fileTree.name.split(".");
+  return (
+    <div className="cursor-pointer">
+      <span
+        className="flex flex-col justify-center text-sm"
+        onClick={
+          fileTree.type === "file" ? () => onClicking(fileTree.name) : () => {}
+        }
+      >
+        <span
+          className="flex flex-row mb-1 ml-2 items-center"
+          onClick={() => {
+            isOpened((prev) => !prev);
+          }}
+        >
+          {fileTree.type === "folder" ? (
+            opened ? (
+              <ChevronDown className="size-[18px]" />
+            ) : (
+              <ChevronRight className="size-[18px]" />
+            )
+          ) : null}
+
+          {fileTree.type === "file" ? (
+            spliting.length === 2 ? (
+              <SVG type={spliting[1]} isFolder={false} />
+            ) : (
+              <SVG type={spliting[0]} isFolder={false} />
+            )
+          ) : opened ? (
+            <SVG
+              type={fileTree.name}
+              isFolder={true}
+              opened={opened}
+            />
+          ) : (
+            <SVG type={fileTree.name} isFolder={true} opened={opened} />
+          )}
+
+          {fileTree.name}
+        </span>
+
+        {opened && (
+          <span className="ml-4 border-l-2 border-gray-500 mb-1">
+            {fileTree.children &&
+              fileTree.children.map((file, idx) => (
+                <Architecture
+                  fileTree={file}
+                  key={idx}
+                  onClicking={onClicking}
+                />
+              ))}
+          </span>
+        )}
+      </span>
+    </div>
+  );
+};
+
+export default Architecture;
+`,
+    'LeftSide.tsx':`import { useEffect } from "react";
+import Architecture from "./Architecture";
+import { architecture } from "./data/arc";
+import { changeTab, increment } from "../app/features/treeSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../app/store";
+
+const LeftSide = () => {
+
+    const {tabsFile, openFile} = useSelector((state: RootState) => state.tabs);
+
+    const dispatch = useDispatch(); 
+
+    const handleOnClick = (name: string) => {
+        const included = tabsFile.includes(newFile);
+        if (!included)
+            dispatch(increment(newFile));
+        else
+            dispatch(changeTab(newFile));
+    };
+
+    useEffect(() => {
+        console.log("Tabs file updated:", tabsFile);
+        console.log("Tabs file updated:", openFile);
+      }, [tabsFile, openFile]);
+
+    return (
+        <>
+            <div className="w-full mb-3 mt-3 pl-5 text-white">EXPLORER</div>
+
+            <div className="flex flex-col">
+                {architecture.map(arch => (
+                    <Architecture
+                        fileTree={arch}
+                        onClicking={handleOnClick}
+                        key={arch.id}
+                    />
+                ))}
+            </div>
+        </>
+    )
+}
+
+export default LeftSide;`,
+    'icons.ts': `import { ISVG } from "../interfaces/interfaces";
 
 const h= 20;
 const w= 20;
@@ -325,3 +549,98 @@ export const svgIcons: { [key in ISVG["type"]]: JSX.Element } = {
     </svg>
   ),
 };
+`,
+    'README.md':   `# React + TypeScript + Vite
+
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel]
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+
+- Configure the top-level parserOptions property like this:
+
+js
+export default tseslint.config({
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+
+
+- Replace tseslint.configs.recommended to tseslint.configs.recommendedTypeChecked or tseslint.configs.strictTypeChecked
+- Optionally add ...tseslint.configs.stylisticTypeChecked
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+
+js
+// eslint.config.js
+import react from 'eslint-plugin-react'
+
+export default tseslint.config({
+  // Set the react version
+  settings: { react: { version: '18.3' } },
+  plugins: {
+    // Add the react plugin
+    react,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended rules
+    ...react.configs.recommended.rules,
+    ...react.configs['jsx-runtime'].rules,
+  },
+})
+
+`,
+    'index.js': `// Function to update the text content of an element
+function updateTextContent() {
+  const element = document.getElementById('message');
+  element.textContent = 'Hello, World!';
+}
+
+// Function to initialize event listeners
+function initialize() {
+  const button = document.getElementById('myButton');
+  button.addEventListener('click', updateTextContent);
+}
+
+// Run the initialize function when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', initialize);
+`,
+    'file.ts': `// Define an interface for a person
+interface Person {
+  firstName: string;
+  lastName: string;
+  age: number;
+}
+
+// Define a class that implements the Person interface
+class Greeting implements Person {
+  firstName: string;
+  lastName: string;
+  age: number;
+
+  constructor(firstName: string, lastName: string, age: number) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.age = age;
+  }
+
+}
+
+// Create an instance of the Greeting class
+const person = new Greeting('John', 'Doe', 30);
+
+// Log the greeting message to the console
+console.log(person.getGreeting());
+`
+  };

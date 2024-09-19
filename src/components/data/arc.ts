@@ -59,11 +59,6 @@ export const architecture: IFile[] = [
                                 id: 10,
                                 name: 'package.json',
                                 type: 'file',
-                            },
-                            {
-                                id: 11,
-                                name: 'README.md',
-                                type: 'file',
                             }
                         ]
                     }
@@ -117,6 +112,11 @@ export const architecture: IFile[] = [
                         id: 15,
                         name: 'LeftSide.tsx',
                         type: 'file',
+                    },
+                    {            
+                        id: 15,
+                        name: 'Layout.tsx',
+                        type: 'file',
                     }
                 ]
             },
@@ -133,6 +133,11 @@ export const architecture: IFile[] = [
             {
                 id: 20,
                 name: 'tailwind.config.js',
+                type: 'file',
+            },
+            {
+                id: 11,
+                name: 'README.md',
                 type: 'file',
             }
         ]

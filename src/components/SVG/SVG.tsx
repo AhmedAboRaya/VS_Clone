@@ -3,7 +3,7 @@ import { ISVG } from "../interfaces/interfaces";
 
 const SVG = ({ type, isFolder, opened }: ISVG) => {
   return (
-    <div className="mr-2">
+    <div className="mr-2 bg-transparent">
       {type in svgIcons
         ? svgIcons[type]
         : isFolder === true
