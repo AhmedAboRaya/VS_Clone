@@ -16,12 +16,10 @@ const LeftSide = () => {
         <div className="flex flex-col">
             {architecture.map(arch => (
                 <Architecture
-                    key={arch.id}
-                    id={arch.id}
-                    name={arch.name}
-                    type={arch.type}
+                    fileTree={arch}
                     onClicking={handleOnClick}
                     expanded= {expand}
+                    key={arch.id}
                 />
             ))}
         </div>
